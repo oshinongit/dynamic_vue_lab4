@@ -1,6 +1,10 @@
 <template>
   <div class="Dishes">
     <h3>Dishes</h3>
+    <input v-model="search_word" placeholder="Search">
+    <p>Search word is: {{ search_word }}</p>
+    <button v-on:click="getSearch">GO!</button>
+    
     <ul>
       <em v-if='status === "LOADING"'>Loading...</em>
       <b v-else-if='status === "ERROR"'>Failed to load data, please try again</b>
@@ -12,7 +16,7 @@
 </template>
 
 <script>
-  // Alternative to passing the moderl as the component property,
+  // Alternative to passing the model as the component property,
   // we can import the model instance directly
   import modelInstance from "../data/DinnerModel";
 
@@ -33,8 +37,21 @@
     data() {
       return {
         status: "LOADING",
-        dishes: []
+        dishes: [],
+        search_word: ''
+    
       }
+    },
+    methods: {
+      getSearch: function() {
+        
+        modelInstance.getSearchDishes(this.$data.search_word).then(dishes => {
+        this.status = "LOADED"
+        this.dishes = dishes.results
+      }).catch(() => {
+        this.status = "ERROR"
+      })
+     }
     }
   }
 </script>

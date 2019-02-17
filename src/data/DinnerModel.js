@@ -1,8 +1,8 @@
 import ObservableModel from "./ObservableModel";
 
-const BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com";
+const BASE_URL = "http://sunset.nada.kth.se:8080/iprog/group/53";
 const httpOptions = {
-  headers: { "X-Mashape-Key": "YOUR_API_KEY" }
+  headers: { "X-Mashape-Key": "3d2a031b4cmsh5cd4e7b939ada54p19f679jsn9a775627d767" }
 };
 
 class DinnerModel extends ObservableModel {
@@ -37,6 +37,11 @@ class DinnerModel extends ObservableModel {
    */
   getAllDishes() {
     const url = `${BASE_URL}/recipes/search`;
+    return fetch(url, httpOptions).then(this.processResponse);
+  }
+
+  getSearchDishes(search_word) {
+    const url = `${BASE_URL}/recipes/search` + '?query=' + search_word;
     return fetch(url, httpOptions).then(this.processResponse);
   }
 

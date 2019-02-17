@@ -1,9 +1,12 @@
 <template>
-  <div class="select-dish">
-    <h2>This is the Select Dish screen</h2>
+  <div class="select-dish d-flex">
     <!-- We pass the model as property to the Sidebar component -->
+    <div id="sidebar" class="">
     <sidebar :model="this.model"/>
+    </div>
+    <div id="dishes">
     <dishes />
+    </div>
   </div>
 </template>
 
