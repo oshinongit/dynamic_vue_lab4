@@ -1,7 +1,13 @@
 <template>
   <div class="d-flex flex-row flex-grow-1 py-4 wrap-mobile">
+    
     <div id="dishDescription" class="d-flex flex-column flex-fill w-50 mx-5 mb-5">
       <h1>{{dish.title}}</h1>
+      <atom-spinner v-if='status === "LOADING"'
+          :animation-duration="1000"
+          :size="60"
+          :color="'#000000'"
+     />
       <img v-bind:src='dish.image' width="300px">
       <p>{{dish.instructions}}</p>
       <router-link to="/search">
@@ -29,7 +35,8 @@
 </template>
 
 <script>
-import modelInstance from "../data/DinnerModel";
+import modelInstance from "../data/DinnerModel"
+import {AtomSpinner} from 'epic-spinners'
 
 export default {
   mounted() {
@@ -38,7 +45,9 @@ export default {
 
   methods: {
     getItem: function() {
+      this.status = "LOADING"
       modelInstance
+        
         .getDish(this.$route.params.id)
         .then(result => {
           this.status = "LOADED";
@@ -53,8 +62,14 @@ export default {
   data() {
     return {
       dish: {},
-      status: ""
+      status: "",
+      
     };
-  }
+  },
+   components: {
+      
+      AtomSpinner
+      
+    }
 };
 </script>
