@@ -5,13 +5,13 @@
     <p>Search word is: {{ search_word }}</p>
     <button v-on:click="getSearch">GO!</button>
     
-    <ul>
       <em v-if='status === "LOADING"'>Loading...</em>
       <b v-else-if='status === "ERROR"'>Failed to load data, please try again</b>
-      <li v-for="dish in dishes" :id="dish.id" :key="dish.id">
-        {{ dish.title }}
-      </li>
-    </ul>
+      <div class="d-flex justify-content-start p-4 flex-wrap">
+      <div v-for="dish in dishes" :id="dish.id" :key="dish.id" v-on:click="showDetail(dish)">
+        <dishitem :dish="dish" :model="model" />
+      </div>
+      </div>
   </div>
 </template>
 
@@ -19,6 +19,7 @@
   // Alternative to passing the model as the component property,
   // we can import the model instance directly
   import modelInstance from "../data/DinnerModel";
+  import DishItem from '@/components/DishItem'
 
   export default {
     // this methods is called by Vue lifecycle when the
@@ -34,12 +35,15 @@
         this.status = "ERROR"
       })
     },
+    components: {
+      'dishitem': DishItem,
+    },
     data() {
       return {
         status: "LOADING",
         dishes: [],
-        search_word: ''
-    
+        search_word: '',
+        model: modelInstance,
       }
     },
     methods: {
@@ -51,6 +55,11 @@
       }).catch(() => {
         this.status = "ERROR"
       })
+     },
+
+     showDetail: function(dish) {
+       console.log(dish);
+       this.$router.push("/dish/" + dish.id);
      }
     }
   }

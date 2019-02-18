@@ -40,6 +40,15 @@ class DinnerModel extends ObservableModel {
     return fetch(url, httpOptions).then(this.processResponse);
   }
 
+  getDish(id) {
+    const url = `${BASE_URL}/recipes/${id}/information`;
+    return fetch(url, httpOptions).then(this.processResponse);
+  }
+
+
+  
+  //https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/479101/information
+
   getSearchDishes(search_word) {
     const url = `${BASE_URL}/recipes/search` + '?query=' + search_word;
     return fetch(url, httpOptions).then(this.processResponse);

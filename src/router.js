@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Welcome from "@/components/Welcome";
 import SelectDish from "@/components/SelectDish";
+import DishDetail from "@/components/DishDetail";
 import modelInstance from "@/data/DinnerModel";
 
 Vue.use(Router);
@@ -17,6 +18,12 @@ export default new Router({
       path: "/search",
       name: "SelectDish",
       component: SelectDish,
+      props: { model: modelInstance }
+    },
+    {
+      path: "/dish/:id",
+      name: "DishDetail",
+      component: DishDetail,
       props: { model: modelInstance }
     }
   ]
