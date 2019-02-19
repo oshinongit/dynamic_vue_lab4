@@ -8,8 +8,11 @@ const httpOptions = {
 class DinnerModel extends ObservableModel {
   constructor() {
     super();
-    this._numberOfGuests = 4;
+    this._numberOfGuests = 1;
     this.getNumberOfGuests();
+    this.menu = [];
+
+    this.getMenuFromStorage();
   }
 
   /**
@@ -26,6 +29,7 @@ class DinnerModel extends ObservableModel {
    */
   setNumberOfGuests(num) {
     this._numberOfGuests = num;
+    localStorage.setItem('numberOfGuests', JSON.stringify(this._numberOfGuests));
     this.notifyObservers();
   }
 
@@ -45,12 +49,58 @@ class DinnerModel extends ObservableModel {
     return fetch(url, httpOptions).then(this.processResponse);
   }
 
+  addToMenu(dish) {
+    if (this.menu.find(d => d.id == dish.id) !== undefined) {
+      alert("Dish has already been added.");
+      return;
+    }
 
-  
+    this.menu.push(dish);
+    localStorage.setItem('menu', JSON.stringify(this.menu));
+    this.notifyObservers();
+  }
+
+  removeFromMenu(dish) {
+    var index = this.menu.indexOf(dish);
+    if (index > -1) {
+      this.menu.splice(index, 1);
+    }
+
+    localStorage.setItem('menu', JSON.stringify(this.menu));
+    this.notifyObservers();
+  }
+
+  getMenuFromStorage() {
+    if (localStorage.getItem('menu')) {
+      this.menu = JSON.parse(localStorage.getItem('menu'));
+    }
+
+    if (localStorage.getItem('numberOfGuests')) {
+      this._numberOfGuests = JSON.parse(localStorage.getItem('numberOfGuests'));
+    }
+  }
+
+  getMenu() {
+    return this.menu;
+  }
+
+  getTotalMenuPrice() {
+    var price = 0;
+
+    this.menu.forEach(function (item) {
+      item.extendedIngredients.forEach(function (ingredient) {
+        price += 1;
+      });
+    });
+
+    return price * this.getNumberOfGuests();
+  }
+
+
   //https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/479101/information
 
-  getSearchDishes(search_word) {
-    const url = `${BASE_URL}/recipes/search` + '?query=' + search_word;
+  getSearchDishes(search_word, type) {
+    const url = `${BASE_URL}/recipes/search` + '?query=' + search_word + "&type=" + type;
     return fetch(url, httpOptions).then(this.processResponse);
   }
 
